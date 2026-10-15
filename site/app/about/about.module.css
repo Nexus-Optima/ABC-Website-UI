@@ -1,0 +1,66 @@
+.overview { padding-top: 64px; }
+
+.pillar { padding: 32px 34px 36px; gap: 14px; }
+.pillarLabel { font: 500 10.5px/1 var(--sans); letter-spacing: 0.18em; color: var(--muted); }
+.pillarTitle { font: 700 21px/1.3 var(--sans); color: var(--navy); }
+.pillarText { margin: 0; font: 400 15px/1.65 var(--sans); color: var(--ink); }
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 40px;
+  border-bottom: 1px solid var(--line);
+}
+.fact { padding: 6px 24px 24px; border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.fact:first-child { padding-left: 0; border-left: 0; }
+.factValue { font: 500 36px/1 var(--sans); color: var(--navy); }
+.factLabel { font: 500 10px/1 var(--sans); letter-spacing: 0.14em; color: var(--muted); }
+
+.founders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.founder { overflow: hidden; display: flex; flex-direction: column; }
+.photo { height: 340px; border-bottom: 1px solid var(--line); }
+.founderBody { padding: 26px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.founderHead { display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid var(--navy); padding-bottom: 14px; }
+.founderName { font: 700 22px/1.2 var(--sans); color: var(--navy); }
+.founderRole { font: 500 10px/1 var(--sans); letter-spacing: 0.16em; color: var(--muted); }
+.bio { margin: 0; font: 400 14px/1.65 var(--sans); color: var(--ink); flex: 1; }
+
+.linkedin {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font: 600 12.5px/1 var(--sans);
+  color: var(--navy);
+  text-decoration: none;
+  background: #ffffff;
+}
+.linkedin:hover { background: #f7fafc; border-color: #cbd5e0; color: var(--navy); }
+.linkedin :global(.material-icons) { font-size: 15px; }
+
+@media (max-width: 1099px) {
+  .founders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .fact:nth-child(3) { padding-left: 0; border-left: 0; }
+}
+
+@media (max-width: 767px) {
+  .overview { padding-top: 30px; }
+  .pillar { padding: 20px 4px 22px; }
+  .pillarTitle { font-size: 18px; }
+  .pillarText { font-size: 13.5px; }
+  .facts { margin-top: 24px; }
+  .fact { padding: 14px 16px 18px; border-top: 1px solid var(--line); }
+  .fact:nth-child(-n + 2) { border-top: 0; }
+  .factValue { font-size: 30px; }
+  .founders { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .photo { height: 300px; }
+  .founderBody { padding: 20px; }
+  .founderHead { border-bottom: 0; padding-bottom: 0; }
+  .founderName { font-size: 20px; }
+  .bio { font-size: 13.5px; line-height: 1.6; }
+  .linkedin { min-height: 44px; }
+}

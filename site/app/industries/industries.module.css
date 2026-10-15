@@ -1,0 +1,74 @@
+.suites {
+  padding: 64px var(--pad-x) 80px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.suite {
+  display: grid;
+  grid-template-columns: 560px minmax(0, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.media { position: relative; min-height: 480px; border-right: 1px solid var(--line); }
+
+.body { padding: 44px 48px; display: flex; flex-direction: column; gap: 26px; min-width: 0; }
+.intro { display: flex; flex-direction: column; gap: 12px; }
+.kicker { font: 500 11px/1 var(--sans); letter-spacing: 0.18em; color: var(--muted); }
+.name { margin: 0; font: 500 44px/1.06 var(--display); letter-spacing: -0.032em; color: var(--navy); }
+.desc { margin: 0; max-width: 62ch; font: 400 16px/1.65 var(--sans); color: var(--ink); text-wrap: pretty; }
+
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+
+.module {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.moduleIcon {
+  width: 32px; height: 32px; flex: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--navy);
+}
+.moduleIcon :global(.material-icons) { font-size: 17px; }
+.moduleName { font: 600 14.5px/1.3 var(--sans); color: var(--navy); }
+
+.actions { display: flex; align-items: center; gap: 26px; margin-top: auto; }
+
+.notListed {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px);
+  gap: 72px;
+  align-items: start;
+}
+.nlCopy { display: flex; flex-direction: column; gap: 22px; }
+.nlText { margin: 0; max-width: 48ch; font: 400 16px/1.65 var(--sans); color: var(--ink); text-wrap: pretty; }
+.formCard { padding: 34px 36px 36px; }
+
+@media (max-width: 1099px) {
+  .suite { grid-template-columns: minmax(0, 1fr); }
+  .media { min-height: 320px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .notListed { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+
+@media (max-width: 767px) {
+  .suites { padding: 30px var(--pad-x) 40px; gap: 20px; }
+  .media { min-height: 220px; }
+  .body { padding: 24px 20px 28px; gap: 22px; }
+  .name { font-size: 30px; }
+  .desc { font-size: 14.5px; }
+  .cols { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .actions :global(.btn) { white-space: normal; text-align: left; }
+  .nlCopy { gap: 14px; }
+  .nlText { font-size: 14.5px; }
+  .formCard { padding: 24px 20px; }
+}

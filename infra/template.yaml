@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: ABC Website – form-submission backend
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref FormSubmissionsTable
+        BUCKET_NAME: !Ref CvBucket
+        ALLOWED_ORIGIN: !Ref AllowedOrigin
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Default: "*"
+    Description: CORS allowed origin (set to your domain in production)
+
+Resources:
+  # ── API Gateway (HTTP API – cheaper & simpler than REST) ──
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref AllowedOrigin
+        AllowHeaders:
+          - Content-Type
+        AllowMethods:
+          - POST
+          - OPTIONS
+
+  # ── DynamoDB – single table for all form types ──
+  FormSubmissionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: abc-form-submissions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: formType
+          AttributeType: S
+        - AttributeName: submittedAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: formType
+          KeyType: HASH
+        - AttributeName: submittedAt
+          KeyType: RANGE
+
+  # ── S3 – CV / résumé uploads ──
+  CvBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub abc-cv-uploads-${AWS::AccountId}
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteTempUploads
+            Prefix: tmp/
+            Status: Enabled
+            ExpirationInDays: 1
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: [PUT]
+            AllowedOrigins: [!Ref AllowedOrigin]
+            MaxAge: 3600
+
+  # ── Lambda: POST /submit  (all four form types) ──
+  SubmitFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      CodeUri: functions/submit/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FormSubmissionsTable
+      Events:
+        Submit:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /submit
+            Method: POST
+
+  # ── Lambda: POST /upload-url  (presigned S3 PUT for CVs) ──
+  UploadUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      CodeUri: functions/upload-url/
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref CvBucket
+      Events:
+        UploadUrl:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /upload-url
+            Method: POST
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod
+  TableName:
+    Value: !Ref FormSubmissionsTable
+  BucketName:
+    Value: !Ref CvBucket

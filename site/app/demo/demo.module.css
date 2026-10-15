@@ -1,0 +1,15 @@
+.page {
+  background: var(--bg-soft);
+  padding: 80px 32px 96px;
+  border-bottom: 1px solid var(--line);
+}
+.inner { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+.title { margin: 0; font: 500 48px/1.05 var(--display); letter-spacing: -0.035em; color: var(--navy); }
+.card { padding: 36px; }
+
+@media (max-width: 767px) {
+  .page { padding: 32px var(--pad-x) 48px; }
+  .inner { gap: 20px; }
+  .title { font-size: 32px; }
+  .card { padding: 24px 20px; }
+}

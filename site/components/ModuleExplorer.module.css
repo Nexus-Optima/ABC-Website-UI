@@ -1,0 +1,134 @@
+.grid {
+  display: grid;
+  grid-template-columns: 400px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.list { display: flex; flex-direction: column; border-top: 1px solid var(--navy); }
+.listLabel { font: 600 10px/1 var(--sans); letter-spacing: 0.16em; color: var(--muted); padding: 16px 0 4px; }
+
+.module { border-bottom: 1px solid var(--line); }
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.icon {
+  width: 44px; height: 44px; flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  background: #ffffff;
+  color: var(--navy);
+  transition: all 0.3s ease-in-out;
+}
+.icon :global(.material-icons) { font-size: 22px; }
+.module[data-selected] .icon { background: var(--navy); border-color: var(--navy); color: #ffffff; }
+
+.headText { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.idx { font: 600 10px/1 var(--sans); letter-spacing: 0.14em; color: var(--muted); }
+.name { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font: 700 19px/1.25 var(--sans); color: var(--navy); }
+.mark { width: 22px; height: 22px; }
+.mark :global(.material-icons) { font-size: 13px; }
+
+.chev { font-size: 22px; color: var(--navy); transition: transform 0.3s ease-in-out; }
+.module[data-open] .chev { transform: rotate(180deg); }
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+}
+.module[data-open] .panel { grid-template-rows: 1fr; opacity: 1; }
+.panelClip { overflow: hidden; min-height: 0; }
+.panelInner { display: flex; flex-direction: column; gap: 4px; padding: 0 0 20px; }
+
+.line { margin: 0 0 10px 60px; font: 400 14px/1.55 var(--sans); color: var(--ink-2); text-wrap: pretty; }
+
+.feat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.feat:hover { transform: translateX(4px); }
+.feat[data-on] { border-color: var(--line); background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); }
+
+.featBar {
+  position: absolute;
+  left: -1px; top: 10px; bottom: 10px;
+  width: 4px;
+  border-radius: 0 2px 2px 0;
+  background: var(--navy);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.featNum {
+  flex: none;
+  width: 30px;
+  font: 600 11px/1 var(--sans);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: #a0aec0;
+}
+.featText { flex: 1; font: 500 14.5px/1.35 var(--sans); color: var(--ink-2); transition: color 0.3s ease-in-out; }
+.feat > :global(.material-icons) { font-size: 17px; color: var(--navy); opacity: 0; transition: opacity 0.3s ease-in-out; }
+
+.feat[data-on] .featBar,
+.feat[data-on] > :global(.material-icons) { opacity: 1; }
+.feat[data-on] .featNum { color: var(--navy); }
+.feat[data-on] .featText { color: var(--navy); font-weight: 600; }
+
+.screen {
+  position: sticky;
+  top: 96px;
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.stack { display: grid; }
+.shot {
+  grid-area: 1 / 1;
+  aspect-ratio: 16 / 10;
+  opacity: 0;
+  transform: scale(0.985);
+  pointer-events: none;
+  transition: opacity 0.45s ease-in-out, transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.shot[data-on] { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+@media (max-width: 1099px) {
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .screen { position: relative; top: 0; order: -1; }
+}
+
+@media (max-width: 767px) {
+  .name { font-size: 16px; }
+  .line { margin-left: 0; }
+  .feat { padding: 12px; gap: 10px; }
+  .featText { font-size: 13.5px; }
+}

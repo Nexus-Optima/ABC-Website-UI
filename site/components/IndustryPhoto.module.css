@@ -1,0 +1,10 @@
+.wrap {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--photo-bg);
+}
+.photo { position: absolute; inset: 0; filter: grayscale(1) contrast(1.18); }
+.lighten { position: absolute; inset: 0; background: var(--navy); mix-blend-mode: lighten; pointer-events: none; }
+.multiply { position: absolute; inset: 0; background: var(--photo-bg); mix-blend-mode: multiply; pointer-events: none; }

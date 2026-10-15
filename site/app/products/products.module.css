@@ -1,0 +1,70 @@
+.suites {
+  padding: 64px var(--pad-x) 80px;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.media { position: relative; height: 280px; flex: none; border-bottom: 1px solid var(--line); }
+
+.body { padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 24px; flex: 1; }
+.intro { display: flex; flex-direction: column; gap: 12px; }
+.kicker { font: 500 11px/1 var(--sans); letter-spacing: 0.18em; color: var(--muted); }
+.name { margin: 0; font: 500 36px/1.08 var(--display); letter-spacing: -0.03em; color: var(--navy); }
+.lead { margin: 0; font: 400 15.5px/1.6 var(--sans); color: var(--ink); text-wrap: pretty; }
+
+.module {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.moduleIcon {
+  width: 40px; height: 40px; flex: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--navy);
+}
+.moduleIcon :global(.material-icons) { font-size: 20px; }
+.moduleText { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.moduleName { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 700 16px/1.3 var(--sans); color: var(--navy); }
+.moduleLine { font: 400 13.5px/1.5 var(--sans); color: var(--muted); }
+
+.view { margin-top: auto; align-self: flex-start; }
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+.step { display: flex; flex-direction: column; gap: 12px; border-top: 2px solid var(--navy); padding-top: 20px; }
+.when { font: 500 11px/1 var(--sans); letter-spacing: 0.16em; color: var(--muted); }
+
+@media (max-width: 1099px) {
+  .suites { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
+}
+
+@media (max-width: 767px) {
+  .suites { padding: 30px var(--pad-x) 40px; gap: 20px; }
+  .media { height: 200px; }
+  .body { padding: 24px 20px 28px; gap: 20px; }
+  .name { font-size: 28px; }
+  .lead { font-size: 14.5px; }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+}

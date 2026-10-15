@@ -1,0 +1,283 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 580px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  background: #fafaf8;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: var(--sans);
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 36px;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.labelToday, .labelAbc {
+  font: 600 11.5px/1 var(--sans);
+  letter-spacing: 0.2em;
+}
+.labelToday { color: #8a8a8a; }
+.labelAbc { color: var(--navy); padding-left: 18px; opacity: 0; }
+
+.lbox { flex: 1; position: relative; min-height: 0; }
+
+.lstage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 640px;
+  height: 480px;
+  margin: -240px 0 0 -320px;
+  transform-origin: 50% 50%;
+}
+
+/* ---- Spreadsheet ---- */
+
+.sheet {
+  position: absolute;
+  left: 225px;
+  top: 172px;
+  width: 190px;
+  height: 136px;
+  background: #ffffff;
+  border: 1px solid #d6d6d2;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 14px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transform-origin: 50% 50%;
+}
+
+.sheetChrome {
+  height: 14px;
+  background: #efefec;
+  border-bottom: 1px solid #dcdcd8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+}
+.sheetChrome span { width: 5px; height: 5px; border-radius: 50%; background: #c9c9c4; }
+
+.sheetHead {
+  height: 13px;
+  background-color: #e4eee3;
+  background-image: repeating-linear-gradient(90deg, transparent 0 41px, #cfdccd 41px 42px);
+  border-bottom: 1px solid #cfdccd;
+}
+
+.sheetGrid {
+  position: relative;
+  height: 91px;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 41px, #e8e8e4 41px 42px),
+    repeating-linear-gradient(180deg, transparent 0 12px, #e8e8e4 12px 13px);
+}
+
+.mark { position: absolute; height: 4px; border-radius: 2px; background: #cfcfca; }
+.flash { position: absolute; width: 41px; height: 12px; background: #c8553d; opacity: 0; }
+
+.sheetTab {
+  height: 18px;
+  background: #f4f4f1;
+  border-top: 1px solid #dcdcd8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  overflow: hidden;
+}
+.sheetTab :global(.material-icons) { font-size: 11px; line-height: 11px; color: #3f7d4e; }
+.sheetTab span {
+  font: 600 9px/1 var(--sans);
+  color: #4a4a4a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Problem pills ---- */
+
+.problem {
+  position: absolute;
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 9px 15px;
+  font: 500 13px/1.2 var(--sans);
+  background: #fbede9;
+  border: 1px solid #edc7bc;
+  color: #8a3a28;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  opacity: 0;
+  transform-origin: 50% 50%;
+}
+.problemGloss, .pillGloss {
+  position: absolute;
+  inset: 1px;
+  border-radius: 999px;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  pointer-events: none;
+}
+.pillGloss { border-top-color: #ffffff; border-left-color: #ffffff; }
+.problemDot { width: 6px; height: 6px; border-radius: 50%; background: #c8553d; flex: none; }
+
+.divider { background: rgba(6, 57, 84, 0.08); opacity: 0; }
+
+/* ---- Right side ---- */
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 18px;
+  min-width: 0;
+}
+
+.stagebox { flex: 1; position: relative; min-height: 0; overflow: visible; }
+
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 620px;
+  height: 480px;
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%);
+}
+
+.svg { position: absolute; inset: 0; overflow: visible; }
+
+.pill {
+  position: absolute;
+  width: 184px;
+  height: 60px;
+  border-radius: 999px;
+  background: #f3f6f8;
+  border: 1px solid #d5dee6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-align: center;
+}
+.pillTitle { font: 700 13.5px/1.15 var(--sans); color: var(--navy); }
+.pillSub { font: 500 10.5px/1.2 var(--sans); color: #5a7282; }
+
+.halo {
+  position: absolute;
+  left: 200px;
+  top: 165px;
+  width: 220px;
+  height: 150px;
+  border-radius: 10px;
+  border: 1.5px solid var(--navy);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tool {
+  position: absolute;
+  left: 200px;
+  top: 165px;
+  width: 220px;
+  height: 150px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid var(--navy);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolBar {
+  height: 22px;
+  flex: none;
+  background: linear-gradient(135deg, #063954 0%, #0a4d6e 100%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+}
+.toolBar > span:nth-child(-n + 3) { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); }
+.toolTitle { margin-left: 6px; font: 600 9px/1 var(--sans); letter-spacing: 0.02em; color: #ffffff; }
+.toolLive { margin-left: auto; font: 600 6.5px/1 var(--sans); letter-spacing: 0.16em; color: #bfd3de; }
+
+.toolBody { flex: 1; display: flex; min-height: 0; }
+
+.toolRail {
+  width: 24px;
+  flex: none;
+  background: #f5f7fa;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding-top: 8px;
+}
+.toolRail :global(.material-icons) { font-size: 11px; line-height: 11px; color: #9aabb8; }
+
+.toolMain {
+  flex: 1;
+  min-width: 0;
+  padding: 9px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.lane { display: flex; align-items: center; gap: 4px; height: 12px; }
+.laneTag { width: 14px; height: 4px; flex: none; border-radius: 2px; background: #cbd5e0; }
+.laneTrack {
+  position: relative;
+  flex: 1;
+  height: 12px;
+  background-image: repeating-linear-gradient(90deg, #f0f4f8 0 1px, transparent 1px 31px);
+}
+.bar { position: absolute; top: 0; height: 12px; border-radius: 2px; }
+
+.eff { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.eff > span { font: 600 6.5px/1 var(--sans); letter-spacing: 0.14em; color: var(--muted); }
+.effTrack { flex: 1; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.effFill {
+  width: 86%;
+  height: 100%;
+  border-radius: 2px;
+  background: #4caf50;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+.eff :global(.material-icons) { font-size: 10px; line-height: 10px; color: #4caf50; flex: none; }
+
+/* Mobile: stack "Today" above "With Applied Bell Curve". */
+@media (max-width: 719px) {
+  .root {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 1px minmax(0, 1fr);
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .left { padding: 20px 20px 8px; gap: 10px; }
+  .right { padding: 20px 20px 8px; gap: 10px; }
+  .labelToday, .labelAbc { font-size: 10px; }
+  .labelAbc { padding-left: 0; }
+}

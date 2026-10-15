@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# SAM build artifacts
+.aws-sam/
+samconfig.toml
+
+# Environment secrets
+.env.local
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db
