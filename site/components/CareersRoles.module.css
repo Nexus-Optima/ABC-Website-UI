@@ -195,8 +195,6 @@
 @media (max-width: 767px) {
   .roleHead { padding: 18px 16px; gap: 6px 12px; }
   .title { font-size: 16px; }
-  .type { display: none; }
-  .chev { grid-column: 2; }
   .body { padding: 20px 16px 24px; gap: 20px; }
   .summary { font-size: 14px; }
   .cols { grid-template-columns: minmax(0, 1fr); gap: 20px; }

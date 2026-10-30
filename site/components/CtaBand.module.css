@@ -36,22 +36,10 @@
 }
 
 @media (max-width: 767px) {
-  .band { padding: 34px var(--pad-x); gap: 18px; align-items: stretch; border-bottom: 0; }
-  .copy { gap: 18px; }
+  .band { padding: 40px var(--pad-x); gap: 24px; }
+  .copy { gap: 16px; }
   .title { font-size: 28px; line-height: 1.08; letter-spacing: -0.03em; }
   .text { font-size: 14.5px; }
-  .actions { flex-direction: column; align-items: stretch; gap: 0; padding-bottom: 0; }
-  .demo { min-height: 48px; padding: 17px 20px; font-size: 11px; }
-  /* Mobile design: secondary action is an underlined text link. */
-  .actions .talk {
-    align-self: center;
-    border: 0;
-    margin-top: 14px;
-    padding: 8px;
-    font: 400 14px/1 var(--sans);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .actions .talk:hover { background: transparent; color: var(--navy); }
-  .talk :global(.material-icons) { display: none; }
+  .actions { padding-bottom: 0; }
+  .talk { min-height: 44px; padding: 14px 20px; }
 }

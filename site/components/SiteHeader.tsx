@@ -27,7 +27,8 @@ export default function SiteHeader() {
     <header className={styles.header}>
       <div className={styles.bar}>
         <Link href="/" className={styles.brand} aria-label="Applied Bell Curve home">
-          <span className={styles.brandName}>APPLIED BELL CURVE</span>        </Link>
+          <span className={styles.brandName}>APPLIED BELL CURVE</span>
+        </Link>
 
         <nav className={styles.nav} aria-label="Main">
           {NAV.map((item) => (
@@ -52,9 +53,10 @@ export default function SiteHeader() {
           className={styles.menuButton}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen((o) => !o)}
         >
-          {menuOpen ? "CLOSE" : "MENU"}
+          <i className="material-icons" aria-hidden="true">{menuOpen ? "close" : "menu"}</i>
         </button>
       </div>
 

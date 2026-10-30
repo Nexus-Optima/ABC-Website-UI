@@ -24,15 +24,12 @@ export default function CtaBand() {
           <>
             <h2 className={styles.title}>Bring one week of your real schedule.</h2>
             <p className={styles.text}>
-              We will show you what the solver would have done differently<span className="desktop-only">, line by line</span>.
+              We will show you what the solver would have done differently, line by line.
             </p>
           </>
         )}
       </div>
       <div className={styles.actions}>
-        <Link href="/demo" className={`btn btn-caps ${styles.demo} mobile-only`}>
-          REQUEST A DEMO
-        </Link>
         <Link href="/contact" className={`btn btn-outline ${styles.talk}`}>
           Talk to Us<i className="material-icons" aria-hidden="true">arrow_forward</i>
         </Link>

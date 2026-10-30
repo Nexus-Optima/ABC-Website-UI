@@ -24,9 +24,7 @@ export default function SiteFooter() {
         </nav>
       </div>
       <div className={styles.bottom}>
-        <span className={styles.tagline}>PLANNING SYSTEMS FOR FACTORIES THAT KNOW THEIR CONSTRAINTS.</span>
-        <span className={styles.note}>PROTOTYPE · SUPERSCRIPTS 1–5 ARE PLACEHOLDER FIGURES</span>
-      </div>
+        <span className={styles.tagline}>PLANNING SYSTEMS FOR FACTORIES THAT KNOW THEIR CONSTRAINTS.</span>      </div>
     </footer>
   );
 }

@@ -48,33 +48,12 @@
   .media { width: 220px; }
 }
 
-/* ---- Mobile cards ---- */
-
-.cards { display: flex; flex-direction: column; gap: 14px; }
-
-.card {
-  display: flex;
-  align-items: stretch;
-  height: 100px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  text-decoration: none;
+@media (max-width: 767px) {
+  .list { gap: 14px; }
+  .row, .media { height: 100px; }
+  .media { width: 120px; }
+  .rowBody { gap: 12px; padding: 0 16px; }
+  .name { font-size: 18px; }
+  .arrow { width: 36px; height: 36px; }
+  .arrow :global(.material-icons) { font-size: 18px; }
 }
-.card:hover { color: inherit; }
-.cardMedia { position: relative; width: 120px; height: 100px; flex: none; }
-.cardBody {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 16px;
-  min-width: 0;
-  font: 600 18px/1.2 var(--sans);
-  letter-spacing: -0.01em;
-  color: var(--navy);
-}
-.cardBody :global(.material-icons) { font-size: 20px; flex: none; }

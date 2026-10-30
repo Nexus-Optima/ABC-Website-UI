@@ -66,17 +66,19 @@
   .nav { display: none; }
 
   .menuButton {
-    display: block;
-    min-height: 44px;
-    padding: 11px 10px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: #ffffff;
-    font: 500 9.5px/1 var(--sans);
-    letter-spacing: 0.14em;
-    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--navy);
     cursor: pointer;
   }
+  .menuButton :global(.material-icons) { font-size: 26px; }
 
   .menu {
     display: flex;

@@ -77,8 +77,6 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 /* Show/hide by breakpoint where the mobile design differs structurally. */
-@media (max-width: 767px) { .desktop-only { display: none !important; } }
-@media (min-width: 768px) { .mobile-only { display: none !important; } }
 
 /* ---------- Layout ---------- */
 
