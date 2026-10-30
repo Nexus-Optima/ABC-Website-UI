@@ -1,133 +1,153 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
-import { getSuite, type SuiteId } from "@/lib/data";
+import { getSuite, type Module, type Screen, type SuiteId } from "@/lib/data";
 import styles from "./ModuleExplorer.module.css";
-
-type Pick = { m: number; f: number; open: number };
 
 const ROTATE_MS = 5000;
 
-/**
- * APS module list with expandable feature lists and a product-screen panel.
- * The selected feature advances every 5s; any click restarts the timer.
- */
-export default function ModuleExplorer({ suiteId }: { suiteId: SuiteId }) {
-  const suite = getSuite(suiteId)!;
-  const modules = suite.modules;
-  const [pick, setPick] = useState<Pick>(() => ({
-    m: Math.max(0, modules.findIndex((x) => x.features.length)),
-    f: 0,
-    open: -1,
-  }));
+/** Screenshot carousel for one live module. Advances every 5s; any click restarts the timer. */
+function ScreenCarousel({ module: m }: { module: Module }) {
+  const screens: Screen[] = m.screens ?? m.features.map((caption) => ({ caption }));
+  const [index, setIndex] = useState(0);
   const timer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const count = screens.length;
 
   const startRotation = useCallback(() => {
     clearInterval(timer.current);
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    const flat: [number, number][] = [];
-    modules.forEach((m, mi) => m.features.forEach((_, fi) => flat.push([mi, fi])));
-    if (flat.length < 2) return;
-    timer.current = setInterval(() => {
-      setPick((p) => {
-        const k = flat.findIndex((a) => a[0] === p.m && a[1] === p.f);
-        const [mi, fi] = flat[(k + 1) % flat.length];
-        return { m: mi, f: fi, open: p.open === -1 ? -1 : mi };
-      });
-    }, ROTATE_MS);
-  }, [modules]);
+    if (count < 2 || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    timer.current = setInterval(() => setIndex((i) => (i + 1) % count), ROTATE_MS);
+  }, [count]);
 
   useEffect(() => {
     startRotation();
     return () => clearInterval(timer.current);
   }, [startRotation]);
 
-  const choose = (next: Pick) => {
-    setPick(next);
+  if (!count) return null;
+
+  const go = (i: number) => {
+    setIndex((i + count) % count);
     startRotation();
   };
 
-  const current = modules[pick.m];
-  const hasScreens = current?.features.length > 0;
-
   return (
-    <div className={styles.grid}>
-      <div className={styles.list}>
-        <span className={styles.listLabel}>MODULES</span>
-        {modules.map((m, i) => {
-          const open = pick.open === i;
-          const selected = pick.m === i;
-          const panelId = `module-${m.id}`;
-          return (
-            <div key={m.id} className={styles.module} data-open={open || undefined} data-selected={selected || undefined}>
-              <button
-                type="button"
-                className={styles.head}
-                aria-expanded={open}
-                aria-controls={panelId}
-                onClick={() => choose(open ? { ...pick, open: -1 } : { m: i, f: pick.m === i ? pick.f : 0, open: i })}
-              >
-                <span className={styles.icon}><i className="material-icons" aria-hidden="true">{m.icon}</i></span>
-                <span className={styles.headText}>
-                  <span className={styles.idx}>MODULE {String(i + 1).padStart(2, "0")}</span>
-                  <span className={styles.name}>
-                    {m.name}
-                    {m.standalone && (
-                      <span className={`standalone-mark ${styles.mark}`} title="Also available standalone" aria-label="Also available standalone">
-                        <i className="material-icons" aria-hidden="true">extension</i>
-                      </span>
-                    )}
-                    {m.dev && <span className="tag">IN DEVELOPMENT</span>}
-                  </span>
-                </span>
-                <i className={`material-icons ${styles.chev}`} aria-hidden="true">expand_more</i>
-              </button>
-              <div id={panelId} className={styles.panel} inert={!open}>
-                <div className={styles.panelClip}>
-                  <div className={styles.panelInner}>
-                    <p className={styles.line}>{m.line}</p>
-                    {m.features.map((text, fi) => {
-                      const on = selected && pick.f === fi;
-                      return (
-                        <button
-                          key={text}
-                          type="button"
-                          className={styles.feat}
-                          data-on={on || undefined}
-                          aria-pressed={on}
-                          onClick={() => choose({ m: i, f: fi, open: i })}
-                        >
-                          <span className={styles.featBar} />
-                          <span className={styles.featNum}>{i + 1}.{fi + 1}</span>
-                          <span className={styles.featText}>{text}</span>
-                          <i className="material-icons" aria-hidden="true">arrow_forward</i>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+    <div className={styles.screen}>
+      <div className={styles.stage} aria-live="polite" style={m.screenAspect ? ({ "--shot-aspect": m.screenAspect } as React.CSSProperties) : undefined}>
+        {screens.map((s, i) => (
+          <div key={s.caption} className={styles.shot} data-on={i === index || undefined} aria-hidden={i !== index}>
+            {s.src ? (
+              <Image src={s.src} alt={`${m.name}: ${s.caption}`} fill sizes="(max-width: 1099px) 100vw, 760px" style={{ objectFit: "contain" }} />
+            ) : (
+              <ImagePlaceholder caption={`Product screen — ${m.name}: ${s.caption}`} />
+            )}
+          </div>
+        ))}
+        {count > 1 && (
+          <>
+            <button type="button" className={`${styles.nav} ${styles.prev}`} onClick={() => go(index - 1)} aria-label="Previous screen">
+              <i className="material-icons" aria-hidden="true">chevron_left</i>
+            </button>
+            <button type="button" className={`${styles.nav} ${styles.next}`} onClick={() => go(index + 1)} aria-label="Next screen">
+              <i className="material-icons" aria-hidden="true">chevron_right</i>
+            </button>
+          </>
+        )}
       </div>
-
-      <div className={styles.screen} style={{ opacity: hasScreens ? 1 : 0 }} aria-live="polite">
-        <div className={styles.stack}>
-          {modules.flatMap((m, mi) =>
-            m.features.map((text, fi) => {
-              const on = pick.m === mi && pick.f === fi;
-              // TODO: replace placeholders with product screenshots (screen-<suite>-<module>-<n>).
-              return (
-                <div key={`${m.id}-${fi}`} className={styles.shot} data-on={on || undefined} aria-hidden={!on}>
-                  <ImagePlaceholder caption={`Product screen — ${m.name}: ${text}`} />
-                </div>
-              );
-            }),
+      <div className={styles.bar}>
+        <span className={styles.caption}>{screens[index].caption}</span>
+        <div className={styles.pager}>
+          {count > 1 && (
+            <div className={styles.dots}>
+              {screens.map((s, i) => (
+                <button
+                  key={s.caption}
+                  type="button"
+                  className={styles.dot}
+                  data-on={i === index || undefined}
+                  onClick={() => go(i)}
+                  aria-label={`Show screen ${i + 1}`}
+                />
+              ))}
+            </div>
           )}
+          <span className={styles.count}>
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+          </span>
         </div>
       </div>
+    </div>
+  );
+}
+
+function LiveModule({ module: m }: { module: Module }) {
+  const [open, setOpen] = useState(true);
+  const panelId = `module-${m.id}`;
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.info}>
+        <button type="button" className={styles.head} aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}>
+          <span className={styles.icon}><i className="material-icons" aria-hidden="true">{m.icon}</i></span>
+          <span className={styles.headText}>
+            <span className={styles.name}>
+              {m.name}
+              {m.standalone && (
+                <span className={`standalone-mark ${styles.mark}`} title="Also available standalone" aria-label="Also available standalone">
+                  <i className="material-icons" aria-hidden="true">extension</i>
+                </span>
+              )}
+            </span>
+            <span className={styles.line}>{m.line}</span>
+          </span>
+          <i className={`material-icons ${styles.chev}`} aria-hidden="true">expand_less</i>
+        </button>
+        <ol id={panelId} className={styles.features} hidden={!open}>
+          {m.features.map((f, i) => (
+            <li key={f} className={styles.feat}>
+              <span className={styles.featNum}>{String(i + 1).padStart(2, "0")}</span>
+              {f}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <ScreenCarousel module={m} />
+    </div>
+  );
+}
+
+/** APS modules: live modules with features and screens, then the modules still in development. */
+export default function ModuleExplorer({ suiteId }: { suiteId: SuiteId }) {
+  const modules = getSuite(suiteId)!.modules;
+  const live = modules.filter((m) => !m.dev);
+  const soon = modules.filter((m) => m.dev);
+
+  return (
+    <div className={styles.groups}>
+      {live.length > 0 && (
+        <div className={styles.group}>
+          <span className={styles.liveTag}><span className={styles.liveDot} />LIVE MODULES</span>
+          {live.map((m) => <LiveModule key={m.id} module={m} />)}
+        </div>
+      )}
+      {soon.length > 0 && (
+        <div className={styles.group}>
+          <span className={styles.soonTag}>COMING SOON</span>
+          <div className={styles.soonGrid}>
+            {soon.map((m) => (
+              <div key={m.id} className={styles.soon}>
+                <span className={styles.soonIcon}><i className="material-icons" aria-hidden="true">{m.icon}</i></span>
+                <div className={styles.soonText}>
+                  <span className={styles.soonName}>{m.name}</span>
+                  <span className={styles.soonLine}>{m.line}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

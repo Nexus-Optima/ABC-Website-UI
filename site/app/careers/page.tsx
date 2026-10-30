@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CareersRoles from "@/components/CareersRoles";
+import { getOpenRoles } from "@/lib/api";
 
 export const metadata: Metadata = { title: "Careers" };
 
@@ -9,7 +10,8 @@ const VALUES = [
   { icon: "functions", title: "Hard problems, stated plainly", text: "Scheduling and cutting problems with real costs attached. We write them down before we solve them." },
 ];
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const roles = await getOpenRoles();
   return (
     <>
       <section className="page-hero">
@@ -32,7 +34,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <CareersRoles />
+      <CareersRoles roles={roles} />
     </>
   );
 }

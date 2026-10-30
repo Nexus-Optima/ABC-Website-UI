@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { EMAIL_RE, Field } from "@/components/FormField";
+import { EMAIL_RE, Field, TextArea } from "@/components/FormField";
 import { submitForm } from "@/lib/api";
 
-const BLANK = { name: "", email: "", company: "", phone: "", industry: "" };
+const BLANK = { name: "", email: "", company: "", phone: "", industry: "", challenge: "" };
 
 export default function FeasibilityForm() {
   const [v, setV] = useState(BLANK);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const set = (k: keyof typeof BLANK) => (e: React.ChangeEvent<HTMLInputElement>) => setV((s) => ({ ...s, [k]: e.target.value }));
+  const set = (k: keyof typeof BLANK) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setV((s) => ({ ...s, [k]: e.target.value }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,9 +55,16 @@ export default function FeasibilityForm() {
         <Field label="PHONE NUMBER" required type="tel" value={v.phone} onChange={set("phone")} autoComplete="tel" />
         <Field label="YOUR INDUSTRY" required value={v.industry} onChange={set("industry")} placeholder="e.g. Corrugated board" />
       </div>
+      <TextArea
+        label="YOUR PLANNING CHALLENGE"
+        rows={4}
+        value={v.challenge}
+        onChange={set("challenge")}
+        placeholder="Describe the problem you face today and what you want to solve."
+      />
       {error && <div className="form-error" role="alert">{error}</div>}
-      <button type="submit" className="btn btn-caps" disabled={submitting}>
-        {submitting ? "SUBMITTING…" : "CHECK FEASIBILITY"}
+      <button type="submit" className="btn btn-caps" style={{ width: "100%" }} disabled={submitting}>
+        {submitting ? "SUBMITTING…" : "SUBMIT"}
       </button>
     </form>
   );

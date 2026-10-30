@@ -27,9 +27,7 @@ export default function SiteHeader() {
     <header className={styles.header}>
       <div className={styles.bar}>
         <Link href="/" className={styles.brand} aria-label="Applied Bell Curve home">
-          <span className={styles.brandName}>APPLIED BELL CURVE</span>
-          <span className={styles.brandSub}>MANUFACTURING PLANNING</span>
-        </Link>
+          <span className={styles.brandName}>APPLIED BELL CURVE</span>        </Link>
 
         <nav className={styles.nav} aria-label="Main">
           {NAV.map((item) => (

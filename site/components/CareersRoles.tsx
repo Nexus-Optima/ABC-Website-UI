@@ -1,42 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { EMAIL_RE, Field, TextArea } from "@/components/FormField";
-import { submitForm, uploadFile } from "@/lib/api";
+import { MAX_CV_BYTES, jdDownloadUrl, submitForm, uploadFile, type Role } from "@/lib/api";
 import styles from "./CareersRoles.module.css";
-
-type Role = { id: string; title: string; team: string; location: string; type: string; summary: string; do: string[]; need: string[] };
-
-const ROLES: Role[] = [
-  { id: "opt-eng", title: "Optimisation Engineer", team: "Optimisation", location: "HQ · On-site", type: "FULL-TIME",
-    summary: "Build and tune the solvers behind our polyfilm and terry towel planning modules. You will turn plant rules into models and make them fast enough for daily use.",
-    do: ["Formulate scheduling and cutting-stock problems as MIP and CP models", "Profile and speed up solver runs on real customer data", "Work with planners to validate every constraint you write"],
-    need: ["Degree in operations research, applied maths or similar", "Hands-on experience with a MIP or CP solver", "Python, and patience with messy data"] },
-  { id: "fs-eng", title: "Senior Full-stack Engineer", team: "Engineering", location: "Hybrid", type: "FULL-TIME",
-    summary: "Own the planner-facing web apps: timelines, parameter matrices and the replanning flow. Planners use these screens for hours every day.",
-    do: ["Build dense, fast React interfaces for planners", "Design APIs between the solver and the UI", "Ship, observe and fix in production with customers"],
-    need: ["5+ years building web applications", "React and a typed backend language", "Care for data-heavy UI and performance"] },
-  { id: "data-eng", title: "Data Engineer", team: "Engineering", location: "Hybrid", type: "FULL-TIME",
-    summary: "Build the data layer that reconciles ERP exports, spreadsheets and machine masters before anything is optimised.",
-    do: ["Build ingestion pipelines from ERP systems and Excel", "Write validation rules that catch bad inputs early", "Own data quality reporting for each deployment"],
-    need: ["3+ years in data engineering", "Strong SQL and Python", "Experience with ERP data is a plus"] },
-  { id: "impl-tt", title: "Implementation Consultant, Terry Towel", team: "Implementation", location: "Customer sites", type: "FULL-TIME",
-    summary: "Lead deployments at terry towel mills, from the first data audit to the parallel run and go-live.",
-    do: ["Map a mill's yarn dyeing, warping, weaving and processing route", "Configure constraints with our engineers", "Train planners and run the parallel-run review"],
-    need: ["Experience in textile production or planning", "Comfort with data and spreadsheets", "Willingness to travel to plants"] },
-  { id: "designer", title: "Product Designer", team: "Design", location: "Hybrid", type: "FULL-TIME",
-    summary: "Design tools planners trust with their schedule: Gantt timelines, override flows and variance views.",
-    do: ["Research how planners work on the floor", "Design and prototype dense, data-heavy interfaces", "Work day to day with engineers on shipped detail"],
-    need: ["A portfolio of complex B2B or data products", "Strong interaction and information design", "Interest in manufacturing"] },
-];
 
 const GENERAL: Role = { id: "general", title: "General application", team: "Any team", location: "Any", type: "OPEN",
   summary: "Tell us what you do and where you would help. We read every application.", do: ["Tell us which problems you want to work on"], need: ["A CV and a short note"] };
 
-const TEAMS = ["All", "Engineering", "Optimisation", "Implementation", "Design"];
 const BLANK = { name: "", email: "", phone: "", link: "", note: "" };
 
-export default function CareersRoles() {
+export default function CareersRoles({ roles }: { roles: Role[] }) {
+  const teams = ["All", ...new Set(roles.map((r) => r.team))];
   const [filter, setFilter] = useState("All");
   const [openId, setOpenId] = useState<string | null>(null);
   const [applyId, setApplyId] = useState<string | null>(null);
@@ -46,12 +21,29 @@ export default function CareersRoles() {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cv, setCv] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const cvUpload = useRef<{ file: File; promise: Promise<string> } | null>(null);
   const [v, setV] = useState(BLANK);
   const set = (k: keyof typeof BLANK) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setV((s) => ({ ...s, [k]: e.target.value }));
 
-  const list = (general ? [GENERAL] : []).concat(ROLES.filter((r) => filter === "All" || r.team === filter));
+  const list = (general ? [GENERAL] : []).concat(roles.filter((r) => filter === "All" || r.team === filter));
 
-  const startApply = (id: string) => { setApplyId(id); setError(""); setCvFile(null); setCv(""); setV(BLANK); };
+  const startApply = (id: string) => { setApplyId(id); setError(""); setCvFile(null); setCv(""); setV(BLANK); cvUpload.current = null; };
+
+  const chooseCv = (file: File | null) => {
+    cvUpload.current = null;
+    if (file && file.size > MAX_CV_BYTES) {
+      setCvFile(null);
+      setCv("");
+      return setError("Your CV must be under 5 MB.");
+    }
+    setCvFile(file);
+    setCv(file?.name ?? "");
+    setError("");
+    if (!file) return;
+    const promise = uploadFile(file);
+    promise.catch(() => {});
+    cvUpload.current = { file, promise };
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,13 +56,15 @@ export default function CareersRoles() {
     try {
       let cvKey = "";
       if (cvFile) {
-        cvKey = await uploadFile(cvFile);
+        const pending = cvUpload.current?.file === cvFile ? cvUpload.current.promise : uploadFile(cvFile);
+        cvKey = await pending.catch(() => uploadFile(cvFile));
       }
       await submitForm("career", {
         ...v,
         roleId: applyId!,
         roleTitle: role?.title ?? applyId!,
         cvKey,
+        cvName: cvFile?.name ?? "",
       });
       setDone((d) => ({ ...d, [applyId!]: true }));
       setApplyId(null);
@@ -86,11 +80,11 @@ export default function CareersRoles() {
       <div className={styles.head}>
         <div className="section-head" style={{ margin: 0 }}>
           <span className="rule" />
-          <div className="eyebrow">OPEN ROLES · {ROLES.length}</div>
+          <div className="eyebrow">OPEN ROLES · {roles.length}</div>
           <h2 className="h2" style={{ lineHeight: 1.08, letterSpacing: "-0.03em" }}>Where you could fit.</h2>
         </div>
         <div className={styles.filters} role="group" aria-label="Filter by team">
-          {TEAMS.map((t) => (
+          {teams.map((t) => (
             <button key={t} type="button" className={styles.filter} aria-pressed={filter === t} onClick={() => setFilter(t)}>
               {t}
             </button>
@@ -118,25 +112,38 @@ export default function CareersRoles() {
 
               {open && (
                 <div className={styles.body}>
-                  <p className={styles.summary}>{r.summary}</p>
-                  <div className={styles.cols}>
-                    <div className="ruled-list">
-                      <span className="label">WHAT YOU WILL DO</span>
-                      {r.do.map((d) => (
-                        <div key={d} className="ruled-item" style={{ lineHeight: 1.5 }}>
-                          <i className="material-icons" aria-hidden="true">arrow_right</i><span>{d}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="ruled-list">
-                      <span className="label">WHAT YOU BRING</span>
-                      {r.need.map((d) => (
-                        <div key={d} className="ruled-item" style={{ lineHeight: 1.5 }}>
-                          <i className="material-icons" aria-hidden="true">check</i><span>{d}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className={styles.bodyTop}>
+                    <p className={styles.summary}>{r.summary}</p>
+                    {r.jdKey && (
+                      <a className={styles.jd} href={jdDownloadUrl(r.id)} aria-label="Job description">
+                        <i className="material-icons" aria-hidden="true">download</i>
+                      </a>
+                    )}
                   </div>
+                  {(r.do.length > 0 || r.need.length > 0) && (
+                    <div className={styles.cols}>
+                      {r.do.length > 0 && (
+                        <div className="ruled-list">
+                          <span className="label">WHAT YOU WILL DO</span>
+                          {r.do.map((d) => (
+                            <div key={d} className="ruled-item" style={{ lineHeight: 1.5 }}>
+                              <i className="material-icons" aria-hidden="true">arrow_right</i><span>{d}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {r.need.length > 0 && (
+                        <div className="ruled-list">
+                          <span className="label">WHAT YOU BRING</span>
+                          {r.need.map((d) => (
+                            <div key={d} className="ruled-item" style={{ lineHeight: 1.5 }}>
+                              <i className="material-icons" aria-hidden="true">check</i><span>{d}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {!applying && !isDone && (
                     <button type="button" className="btn btn-caps" style={{ alignSelf: "flex-start", padding: "16px 26px" }} onClick={() => startApply(r.id)}>
@@ -166,11 +173,7 @@ export default function CareersRoles() {
                           type="file"
                           accept=".pdf,.doc,.docx"
                           className="sr-only"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0] ?? null;
-                            setCvFile(file);
-                            setCv(file?.name ?? "");
-                          }}
+                          onChange={(e) => chooseCv(e.target.files?.[0] ?? null)}
                         />
                       </label>
                       <TextArea label="WHY THIS ROLE?" optional rows={4} value={v.note} onChange={set("note")} />

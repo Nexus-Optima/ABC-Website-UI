@@ -1,81 +1,98 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = { title: "About" };
 
-const PILLARS = [
-  { label: "WHAT WE DO TODAY", title: "Two industries, run in production.", text: "We run in polyfilm manufacturing and terry towel. In each, we model the plant's machines, materials and changeovers as constraints. The Slitting Planner and Loom Planner run in plants today; other modules are in development." },
-  { label: "WHAT COMES NEXT", title: "One industry at a time.", text: "We add industries where constraints are physical and planning is still done by hand. Each new industry starts with a plant that runs it, not a template, and new modules follow the problems our customers bring us." },
-  { label: "HOW WE WORK", title: "Model first, planners in charge.", text: "We model your plant's rules before we generate any plan, and accommodate custom needs rather than force a template. Planners keep control of every plan. We measure ourselves on what the plant actually runs." },
+const STORY = [
+  {
+    label: "WHERE WE STARTED",
+    text: "We first put that idea to work in packaging films, on a single question: how to cut every jumbo roll with the least trim. That became our Slitting Planner. The Loom Planner followed, scheduling every loom in a terry towel mill. Together they are the foundation of a full Advanced Planning & Scheduling (APS) suite for manufacturers.",
+  },
+  {
+    label: "WHY PLANNING",
+    text: "Why planning? It decides what every machine in a plant does next, yet it is often the least supported job in the building. We exist to change that, bringing the maths of optimisation to the planning desk in a form your whole team can use.",
+  },
 ];
 
-// TODO: replace placeholder facts with real figures.
-const FACTS = [
-  { value: "Year", label: "FOUNDED" },
-  { value: "City", label: "HEADQUARTERS" },
-  { value: "2", label: "INDUSTRIES LIVE" },
-  { value: "00", label: "PLANTS PLANNED DAILY" },
+type Founder = { name: string; tagline: string; bio: string; photo?: string; linkedin: string };
+
+// TODO: add photos (under /public/founders) and LinkedIn URLs.
+const FOUNDERS: Founder[] = [
+  {
+    name: "Shrikant Sharma",
+    tagline: "Making powerful planning feel simple",
+    bio: "Shrikant holds a B.Tech in Mechanical Engineering from IIT Bombay, so he understands the machines and processes our customers plan around. He spent over five years in product and strategy in the gaming industry, where even feature-packed software must feel easy to use. He brings that thinking to our planning software: powerful underneath, simple on screen.",
+    linkedin: "#",
+  },
+  {
+    name: "Kaivan Shah",
+    tagline: "The engineer behind our reliability",
+    bio: "Kaivan has spent over six years building software, including at Amazon, where he learned to design systems that stay reliable under heavy, real-world use. For a manufacturer, a planning system that fails can bring a plant to a stop. That's why he builds ours to be dependable first.",
+    linkedin: "#",
+  },
+  {
+    name: "Vansh Chiripal",
+    tagline: "Keeping us close to the shop floor",
+    bio: "Vansh comes from a manufacturing family. As a second-generation entrepreneur at the Chiripal Group, he has worked across several manufacturing businesses and seen firsthand how one planning decision can ripple across the shop floor. That experience keeps our product grounded in how plants actually run, not how they look on paper.",
+    linkedin: "#",
+  },
 ];
 
-// TODO: replace with real founder names, roles, bios, photos and LinkedIn URLs.
-const FOUNDERS = [1, 2, 3].map((n) => ({
-  id: n,
-  name: "Founder Name",
-  role: "CO-FOUNDER · ROLE",
-  bio: "Short paragraph placeholder. Three or four sentences on who they are, the problem they have spent their career on, and what they lead at Applied Bell Curve.",
-  linkedin: "#",
-}));
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" />
+    </svg>
+  );
+}
 
 export default function AboutPage() {
   return (
     <>
-      <section className="page-hero">
+      <section className={`page-hero ${styles.hero}`}>
         <div className="eyebrow">ABOUT APPLIED BELL CURVE</div>
-        <h1 className="page-title" style={{ maxWidth: "22ch" }}>Planning software for factories that know their constraints.</h1>
-        <p className="page-lead" style={{ maxWidth: "64ch" }}>
-          Applied Bell Curve builds planning and scheduling software for manufacturers. We turn order books, machine data and production rules into plans a plant can run, and replan when the day goes wrong.
+        <h1 className={`page-title ${styles.title}`}>Advanced planning and scheduling systems, plants can rely on.</h1>
+        <p className={`page-lead ${styles.lead}`}>
+          Applied Bell Curve was founded on one idea: enterprises deserve intelligent solutions that are easily integrated, quick to adopt and simple to use every day.
         </p>
       </section>
 
-      <section className={`section ${styles.overview}`}>
-        <div className="cells">
-          {PILLARS.map((p) => (
-            <div key={p.label} className={`cell ${styles.pillar}`}>
-              <span className={styles.pillarLabel}>{p.label}</span>
-              <div className={styles.pillarTitle}>{p.title}</div>
-              <p className={styles.pillarText}>{p.text}</p>
-            </div>
-          ))}
-        </div>
-        <div className={styles.facts}>
-          {FACTS.map((f) => (
-            <div key={f.label} className={styles.fact}>
-              <span className={styles.factValue}>{f.value}</span>
-              <span className={styles.factLabel}>{f.label}</span>
-            </div>
-          ))}
-        </div>
+      <section className={styles.story}>
+        {STORY.map((s) => (
+          <div key={s.label} className={styles.storyCol}>
+            <span className="rule" />
+            <div className="eyebrow">{s.label}</div>
+            <p className={styles.storyText}>{s.text}</p>
+          </div>
+        ))}
       </section>
 
-      <section className="section section--soft">
-        <div className="section-head" style={{ marginBottom: 32 }}>
+      <section className={`section section--soft ${styles.foundersSection}`}>
+        <div className="section-head" style={{ marginBottom: 24 }}>
           <span className="rule" />
           <div className="eyebrow">FOUNDERS</div>
           <h2 className="h2">The people behind the plan.</h2>
         </div>
         <div className={styles.founders}>
           {FOUNDERS.map((f) => (
-            <article key={f.id} className={`card ${styles.founder}`}>
-              <div className={styles.photo}><ImagePlaceholder caption="Founder photo" /></div>
+            <article key={f.name} className={`card ${styles.founder}`}>
+              <div className={styles.photo}>
+                {f.photo ? (
+                  <Image src={f.photo} alt={f.name} fill sizes="(max-width: 767px) 100vw, (max-width: 1099px) 50vw, 380px" style={{ objectFit: "cover" }} />
+                ) : (
+                  <ImagePlaceholder caption={`${f.name} photo`} />
+                )}
+              </div>
               <div className={styles.founderBody}>
                 <div className={styles.founderHead}>
-                  <div className={styles.founderName}>{f.name}</div>
-                  <div className={styles.founderRole}>{f.role}</div>
+                  <h3 className={styles.founderName}>{f.name}</h3>
+                  <div className={styles.founderTagline}>{f.tagline}</div>
                 </div>
                 <p className={styles.bio}>{f.bio}</p>
-                <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className={styles.linkedin}>
-                  LinkedIn<i className="material-icons" aria-hidden="true">open_in_new</i>
+                <a href={f.linkedin} target="_blank" rel="noopener noreferrer" className={styles.linkedin} aria-label={`${f.name} on LinkedIn`}>
+                  <LinkedInIcon />
                 </a>
               </div>
             </article>

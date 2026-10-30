@@ -11,7 +11,7 @@ const BLANK = { name: "", phone: "", industry: "", company: "", role: "", email:
 export default function DemoForm() {
   const params = useSearchParams();
   const [v, setV] = useState(() => {
-    const ind = params.get("industry") ?? "";
+    const ind = params?.get("industry") ?? "";
     return { ...BLANK, industry: getSuite(ind) ? ind : "" };
   });
   const [error, setError] = useState("");
