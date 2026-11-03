@@ -13,16 +13,16 @@ import styles from "./HeroSheets.module.css";
 const END = 15.6;
 const CMP = 6.6;
 const TP = [0.3, 0.6, 0.9, 1.2, 1.5];
-const TL = [1.9, 2.5, 3.1, 3.7, 4.3, 4.9, 5.5];
-const LR = [-3, 2.5, -2, 2, -2.5, 1.5, -1.5];
+const TL = [1.9, 2.5, 3.1, 3.7, 4.3, 4.9];
+const LR = [-2.5, 2.5, -2, 2, -2, 1.5];
 const PROB_SH = "inset 0 -3px 6px rgba(200,85,61,.10), inset 0 2px 3px rgba(255,255,255,.8), 0 1px 1px rgba(200,85,61,.14), 0 4px 10px rgba(200,85,61,.10)";
 const TS = [8.9, 9.6, 10.3, 11.0, 11.7, 12.4, 8.1];
 const SHEETS = [{ x: -14, y: 24, r: -4 }, { x: 12, y: 12, r: 3 }, { x: -6, y: 0, r: -2 }, { x: 10, y: -12, r: 2.5 }, { x: 0, y: -24, r: -1 }];
 const NAMES = ["Order_Book_Sep.xlsx", "Machine_Capacity.xlsx", "Changeover_Matrix.xlsx", "Pending_Orders.xlsx", "Production_Plan_FINAL_v3.xlsx"];
 const WAVES = [13.4, 14.4];
 // Problem pills: LPC = compact layout (after compress), LPW = wide layout around the enlarged stack.
-const LPC = [[130, 70], [330, 40], [530, 92], [105, 240], [535, 252], [175, 415], [458, 428]];
-const LPW = [[-70, 110], [320, 44], [710, 118], [-140, 262], [790, 272], [-40, 414], [690, 424]];
+const LPC = [[200, 82], [450, 92], [110, 240], [530, 252], [190, 415], [455, 428]];
+const LPW = [[-20, 96], [660, 106], [-140, 262], [790, 272], [-40, 414], [690, 424]];
 const SX = 1.45, PX = 1.42;
 // Pop-in peak per solution pill, limited by free space around it.
 const PEAK = [1.25, 1.25, 1.1, 1.25, 1.25, 1.1];
@@ -39,17 +39,17 @@ const LANES: [number, number, string][][] = [
 ];
 
 const PROBLEMS = [
-  "Slow planning", "What-ifs are hard to run", "Throughput is lost", "Low plant efficiency",
-  "No optimisation engine", "Poor cross-team visibility", "Delayed delivery dates",
+  "Replanning Is Hard", "One Plan, No Options", "Avoidable Waste", "Throughput Is Lost",
+  "Poor Cross-Team Visibility", "Delayed Delivery Dates",
 ];
 
 const SOLUTIONS = [
-  { title: "Solver-built plans", sub: "From your daily order feed", left: 98, top: 32 },
-  { title: "Test before you commit", sub: "Scenarios beside the live plan", left: 338, top: 32 },
-  { title: "Fewer changeovers", sub: "Changeover time minimised", left: 436, top: 210 },
-  { title: "Less trim waste", sub: "Few patterns, repeated often", left: 338, top: 388 },
-  { title: "One plan, every team", sub: "Each team sees what it needs", left: 98, top: 388 },
-  { title: "Dates you can keep", sub: "Cutoffs planned for first", left: 0, top: 210 },
+  { title: "Fast and Efficient Replanning", left: 98, top: 32 },
+  { title: "Compare Alternate Plans", left: 338, top: 32 },
+  { title: "Maximum Throughput", left: 436, top: 210 },
+  { title: "Less Production Waste", left: 338, top: 388 },
+  { title: "One System, Shared Visibility", left: 98, top: 388 },
+  { title: "Higher OTIF", left: 0, top: 210 },
 ];
 
 const SPOKES = ["M250 165 V92", "M370 165 V92", "M420 240 H436", "M370 315 V388", "M250 315 V388", "M200 240 H184"];
@@ -253,7 +253,7 @@ export default function HeroSheets() {
   }, []);
 
   return (
-    <div ref={rootRef} className={styles.root} role="img" aria-label="Today: planning across scattered spreadsheets causes slow planning, lost throughput and delayed delivery dates. With Applied Bell Curve: one solver-built production plan with fewer changeovers, less trim waste and dates you can keep.">
+    <div ref={rootRef} className={styles.root} role="img" aria-label="Today: planning across scattered spreadsheets makes replanning hard, wastes material and delays delivery dates. With Applied Bell Curve: one integrated system with fast replanning, alternate plans to compare, higher OTIF and less production waste.">
       <div data-left className={styles.left}>
         <div className={styles.labelToday}>TODAY</div>
         <div data-lbox className={styles.lbox}>
@@ -308,7 +308,6 @@ export default function HeroSheets() {
               <div key={p.title} data-pill={i} className={styles.pill} style={{ left: p.left, top: p.top, opacity: 0 }}>
                 <span className={styles.pillGloss} />
                 <span className={styles.pillTitle}>{p.title}</span>
-                <span className={styles.pillSub}>{p.sub}</span>
               </div>
             ))}
 
@@ -316,7 +315,7 @@ export default function HeroSheets() {
             <div data-pill="6" className={styles.tool} style={{ opacity: 0 }}>
               <div className={styles.toolBar}>
                 <span /><span /><span />
-                <span className={styles.toolTitle}>Production Plan</span>
+                <span className={styles.toolTitle}>Integrated System</span>
                 <span className={styles.toolLive}>LIVE</span>
               </div>
               <div className={styles.toolBody}>

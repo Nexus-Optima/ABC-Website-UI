@@ -136,6 +136,7 @@
 .pager { display: flex; align-items: center; gap: 14px; flex: none; }
 .dots { display: flex; align-items: center; gap: 5px; }
 .dot {
+  position: relative;
   width: 6px; height: 6px;
   padding: 0;
   border: 0;
@@ -144,6 +145,7 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
+.dot::after { content: ""; position: absolute; inset: -14px -3px; }
 .dot[data-on] { width: 16px; background: var(--navy); }
 .count { font: 500 10.5px/1 var(--sans); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: var(--muted); }
 
@@ -182,6 +184,7 @@
 }
 
 @media (max-width: 767px) {
+  .nav { width: 40px; height: 40px; }
   .groups { gap: 32px; }
   .card { padding: 16px; }
   .soonGrid { grid-template-columns: minmax(0, 1fr); }

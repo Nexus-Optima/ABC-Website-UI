@@ -8,7 +8,9 @@ import styles from "./CareersRoles.module.css";
 const GENERAL: Role = { id: "general", title: "General application", team: "Any team", location: "Any", type: "OPEN",
   summary: "Tell us what you do and where you would help. We read every application.", do: ["Tell us which problems you want to work on"], need: ["A CV and a short note"] };
 
-const BLANK = { name: "", email: "", phone: "", link: "", note: "" };
+const BLANK = { name: "", email: "", phone: "", link: "", currentCtc: "", expectedCtc: "", note: "" };
+const PHONE_RE = /^\d{10}$/;
+const CTC_RE = /^\d+(\.\d{1,2})?$/;
 
 export default function CareersRoles({ roles }: { roles: Role[] }) {
   const teams = ["All", ...new Set(roles.map((r) => r.team))];
@@ -48,9 +50,18 @@ export default function CareersRoles({ roles }: { roles: Role[] }) {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const role = list.find((r) => r.id === applyId);
-    const miss = [v.name.trim() ? "" : "name", v.email.trim() ? "" : "email", v.phone.trim() ? "" : "phone number", cvFile ? "" : "CV"].filter(Boolean);
+    const miss = [
+      v.name.trim() ? "" : "name",
+      v.email.trim() ? "" : "email",
+      v.phone.trim() ? "" : "phone number",
+      v.currentCtc.trim() ? "" : "current or last CTC",
+      v.expectedCtc.trim() ? "" : "expected CTC",
+      cvFile ? "" : "CV",
+    ].filter(Boolean);
     if (miss.length) return setError("Add your " + miss.join(", ") + " to apply.");
     if (!EMAIL_RE.test(v.email)) return setError("Enter a valid email.");
+    if (!PHONE_RE.test(v.phone.trim())) return setError("Enter a 10-digit phone number.");
+    if (!CTC_RE.test(v.currentCtc.trim()) || !CTC_RE.test(v.expectedCtc.trim())) return setError("Enter CTC as a number in lakhs per annum, e.g. 12.");
     setError("");
     setSubmitting(true);
     try {
@@ -61,6 +72,9 @@ export default function CareersRoles({ roles }: { roles: Role[] }) {
       }
       await submitForm("career", {
         ...v,
+        phone: v.phone.trim(),
+        currentCtc: v.currentCtc.trim(),
+        expectedCtc: v.expectedCtc.trim(),
         roleId: applyId!,
         roleTitle: role?.title ?? applyId!,
         cvKey,
@@ -153,12 +167,26 @@ export default function CareersRoles({ roles }: { roles: Role[] }) {
 
                   {applying && (
                     <form className={styles.apply} onSubmit={submit} noValidate>
-                      <div className={styles.applyLabel}>APPLICATION · {r.title.toUpperCase()}</div>
-                      <div className="form-grid">
+                      <div className={styles.applyLabel}>APPLICATION</div>
+                      <div className={styles.grid4}>
                         <Field label="FULL NAME" required value={v.name} onChange={set("name")} autoComplete="name" />
                         <Field label="EMAIL" required type="email" value={v.email} onChange={set("email")} autoComplete="email" />
-                        <Field label="PHONE NUMBER" required type="tel" value={v.phone} onChange={set("phone")} autoComplete="tel" />
-                        <Field label="LINKEDIN OR PORTFOLIO" optional value={v.link} onChange={set("link")} autoComplete="url" />
+                        <Field
+                          label="PHONE NUMBER"
+                          required
+                          type="tel"
+                          inputMode="numeric"
+                          maxLength={10}
+                          placeholder="10-digit number"
+                          value={v.phone}
+                          onChange={(e) => setV((s) => ({ ...s, phone: e.target.value.replace(/\D/g, "").slice(0, 10) }))}
+                          autoComplete="tel-national"
+                        />
+                        <Field label="LINKEDIN OR PORTFOLIO" value={v.link} onChange={set("link")} autoComplete="url" />
+                      </div>
+                      <div className="form-grid">
+                        <Field label="CURRENT OR LAST CTC (IN LPA)" required inputMode="decimal" placeholder="e.g. 12" value={v.currentCtc} onChange={set("currentCtc")} />
+                        <Field label="EXPECTED CTC (IN LPA)" required inputMode="decimal" placeholder="e.g. 15" value={v.expectedCtc} onChange={set("expectedCtc")} />
                       </div>
                       <label className={styles.upload}>
                         <span className={styles.uploadIcon}><i className="material-icons" aria-hidden="true">upload_file</i></span>
@@ -176,7 +204,7 @@ export default function CareersRoles({ roles }: { roles: Role[] }) {
                           onChange={(e) => chooseCv(e.target.files?.[0] ?? null)}
                         />
                       </label>
-                      <TextArea label="WHY THIS ROLE?" optional rows={4} value={v.note} onChange={set("note")} />
+                      <TextArea label="WHY THIS ROLE?" rows={4} value={v.note} onChange={set("note")} />
                       {error && <div className="form-error" role="alert">{error}</div>}
                       <div className={styles.applyActions}>
                         <button type="submit" className="btn btn-caps" disabled={submitting} style={{ padding: "16px 26px" }}>
