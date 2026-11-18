@@ -39,7 +39,7 @@ const LANES: [number, number, string][][] = [
 ];
 
 const PROBLEMS = [
-  "Replanning Is Hard", "One Plan, No Options", "Avoidable Waste", "Throughput Is Lost",
+  "Replanning Is Hard", "One Plan, No Options", "Throughput Is Lost", "Avoidable Waste",
   "Poor Cross-Team Visibility", "Delayed Delivery Dates",
 ];
 

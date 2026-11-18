@@ -11,7 +11,6 @@ export default function IndustriesPage() {
   return (
     <>
       <section className={`page-hero ${styles.hero}`}>
-        <div className="eyebrow">INDUSTRIES WE SERVE</div>
         <h1 className={`page-title ${styles.title}`}>Two industries, modelled in depth.</h1>
       </section>
 

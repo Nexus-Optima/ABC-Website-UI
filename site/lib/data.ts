@@ -89,11 +89,11 @@ export const suites: Suite[] = [
     id: "terry-towel", num: "02", industry: "Terry Towel", name: "ABC for Terry Towel",
     image: "/images/industry-terry-towel.webp", imagePosition: "100% 50%",
     shot: "Terry loom — loop pile forming at the fell",
-    lead: "Weaving plans for terry mills, built on your loom categories, sorts, changeovers and weaving cutoffs. Planning for the rest of the route is in development.",
+    lead: "Planning for integrated terry towel mills, from yarn dyeing to cutting, sewing and packing.",
     desc: "Integrated terry towel mills, from yarn to finished towel. Every stage has its own bottleneck: dye lots, warp beams, loom changeovers, processing capacity. A delay at one stage moves every stage after it. With one plan across every stage, each team sees what the next one needs.",
     constraints: ["Yarn dye-lot sizes and shade matching", "Loom eligibility and changeovers by type", "Dyeing machine capacity and batch compatibility", "Order due dates across the full route", "Availability of trims and packing materials"],
     buying: "Buy the complete APS, or any single module.",
-    flow: "Yarn Dyeing plans dye lots, Warping builds beams, the Loom Planner schedules weaving, then Processing and Cutting, Sewing & Packing finish the towel.",
+    flow: "Planning follows the mill's route: Yarn Dyeing, Warping, Weaving (Loom Planner), Processing, then Cutting, Sewing & Packing.",
     problems: [
       { icon: "palette", title: "Dye Lots That Don't Match Demand", text: "Yarn is dyed in lot sizes that leave shade remnants or short orders." },
       { icon: "grid_on", title: "Changeovers Decided Loom by Loom", text: "Quality and size changes are sequenced by hand across many looms, so changeover time is never minimised." },
@@ -102,13 +102,13 @@ export const suites: Suite[] = [
     ],
     modules: [
       { id: "yarn-dyeing", dev: true, name: "Yarn Dyeing Planner", icon: "palette",
-        line: "Plans yarn dye lots against loom demand.", features: [] },
+        line: "Plans yarn dye lots against weaving demand.", features: [] },
       { id: "warping", dev: true, name: "Warping Planner", icon: "timeline",
-        line: "Plans warping, the preparatory stage that builds beams for the looms.", features: [] },
+        line: "Plans warp beam preparation ahead of weaving.", features: [] },
       { id: "loom", standalone: true, pitch: "Put the right order on the right loom, with fewer beam changes.", highlights: ["Allocation by width, design and pile", "Beam change minimisation", "Yarn availability checked"], name: "Loom Planner", icon: "grid_on",
-        line: "Assigns orders to looms and sequences them.",
+        line: "Assigns orders to looms and sequences them against weaving cutoffs.",
         desc: "Allocates orders across looms by width, pile height and design, and sequences them to minimise beam changes while holding dispatch dates.",
-        features: ["One live plan across every loom", "Cutoffs first, then least changeover time", "Loom eligibility enforced, not advised", "What-if scenarios beside the live plan", "Capacity holds and dates for enquiries"],
+        features: ["One live plan across every loom", "Cutoffs first, then the least changeover time", "What-if scenarios beside the live plan", "Loom eligibility enforced, exceptions logged", "Planned versus actual production by loom"],
         screens: [
           { src: "/images/loom-planner/01-scheduler.png", caption: "One live plan across every loom" },
           { src: "/images/loom-planner/02-reassign-split.png", caption: "Reassign or split a run across looms" },
@@ -117,10 +117,10 @@ export const suites: Suite[] = [
         ],
         inputs: ["Orders", "Loom master", "Yarn availability"],
         outputs: ["Loom schedule", "Beam change plan", "Greige output dates"] },
-      { id: "processing", dev: true, name: "Processing", icon: "invert_colors",
-        line: "Plans post-weaving processing of the woven fabric.", features: [] },
+      { id: "processing", dev: true, name: "Processing Planner", icon: "invert_colors",
+        line: "Plans post-weaving processing of woven fabric.", features: [] },
       { id: "csp", dev: true, name: "CSP Planner", icon: "content_cut",
-        line: "Plans Cutting, Sewing & Packing, the last stage before dispatch.", features: [] },
+        line: "Plans cutting, sewing and packing through to dispatch.", features: [] },
     ],
   },
 ];
@@ -129,8 +129,8 @@ export function getSuite(id: string): Suite | undefined {
   return suites.find((s) => s.id === id);
 }
 
-/** Homepage "Industries We Serve" cards. Names differ from the suite copy on purpose. */
+/** Homepage "Industries We Serve" cards. */
 export const homeIndustries = [
-  { id: "flexible-packaging" as SuiteId, num: "01", name: "Flexible Packaging" },
+  { id: "flexible-packaging" as SuiteId, num: "01", name: "Packaging Films" },
   { id: "terry-towel" as SuiteId, num: "02", name: "Terry Towel" },
 ];

@@ -18,9 +18,6 @@ export default function ContactPage() {
       <section className="page-hero">
         <div className="eyebrow">CONTACT</div>
         <h1 className="page-title">Talk to us.</h1>
-        <p className="page-lead" style={{ maxWidth: "60ch" }}>
-          Questions about a product, an existing deployment or working with us. The right person replies within one business day.
-        </p>
       </section>
 
       <section className={`section ${styles.body}`}>

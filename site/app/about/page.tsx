@@ -18,25 +18,26 @@ const STORY = [
 
 type Founder = { name: string; tagline: string; bio: string; photo?: string; linkedin: string };
 
-// TODO: add photos (under /public/founders) and LinkedIn URLs.
+// TODO: add Shrikant's and Vansh's photos under /public/founders.
 const FOUNDERS: Founder[] = [
   {
     name: "Shrikant Sharma",
-    tagline: "Making powerful planning feel simple",
+    tagline: "The craft of every feature",
     bio: "Shrikant holds a B.Tech in Mechanical Engineering from IIT Bombay, so he understands the machines and processes our customers plan around. He spent over five years in product and strategy in the gaming industry, where even feature-packed software must feel easy to use. He brings that thinking to our planning software: powerful underneath, simple on screen.",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/link-shrikant/",
   },
   {
     name: "Kaivan Shah",
-    tagline: "The engineer behind our reliability",
+    tagline: "The backbone of every plan",
     bio: "Kaivan has spent over six years building software, including at Amazon, where he learned to design systems that stay reliable under heavy, real-world use. For a manufacturer, a planning system that fails can bring a plant to a stop. That's why he builds ours to be dependable first.",
-    linkedin: "#",
+    photo: "/founders/kaivan-shah.jpg",
+    linkedin: "https://www.linkedin.com/in/kaivan-shah-7441b4143/",
   },
   {
     name: "Vansh Chiripal",
-    tagline: "Keeping us close to the shop floor",
+    tagline: "The bridge to every plant",
     bio: "Vansh comes from a manufacturing family. As a second-generation entrepreneur at the Chiripal Group, he has worked across several manufacturing businesses and seen firsthand how one planning decision can ripple across the shop floor. That experience keeps our product grounded in how plants actually run, not how they look on paper.",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/vansh-chiripal/",
   },
 ];
 
@@ -80,7 +81,7 @@ export default function AboutPage() {
             <article key={f.name} className={`card ${styles.founder}`}>
               <div className={styles.photo}>
                 {f.photo ? (
-                  <Image src={f.photo} alt={f.name} fill sizes="(max-width: 767px) 100vw, (max-width: 1099px) 50vw, 380px" style={{ objectFit: "cover" }} />
+                  <Image src={f.photo} alt={f.name} fill sizes="(max-width: 767px) 100vw, (max-width: 1099px) 50vw, 380px" quality={90} style={{ objectFit: "cover" }} />
                 ) : (
                   <ImagePlaceholder caption={`${f.name} photo`} />
                 )}

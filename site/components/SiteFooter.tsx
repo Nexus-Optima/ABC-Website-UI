@@ -23,8 +23,6 @@ export default function SiteFooter() {
           ))}
         </nav>
       </div>
-      <div className={styles.bottom}>
-        <span className={styles.tagline}>PLANNING SYSTEMS FOR FACTORIES THAT KNOW THEIR CONSTRAINTS.</span>      </div>
     </footer>
   );
 }

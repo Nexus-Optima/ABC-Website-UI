@@ -9,11 +9,11 @@ const raleway = Raleway({ subsets: ["latin"], variable: "--font-raleway", displa
 
 export const metadata: Metadata = {
   title: {
-    default: "Applied Bell Curve — From spreadsheet to executable schedule",
+    default: "Applied Bell Curve - Every order, every machine, every minute. Planned.",
     template: "%s · Applied Bell Curve",
   },
   description:
-    "Planning and scheduling software for manufacturers. Your constraints, stated once and enforced — resolved into a schedule your plant can run today.",
+    "Advanced Planning & Scheduling for manufacturers. Every order, every machine, every minute. Planned.",
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };

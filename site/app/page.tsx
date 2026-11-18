@@ -4,12 +4,12 @@ import IndustryAccordion from "@/components/IndustryAccordion";
 import styles from "./home.module.css";
 
 const WHY = [
-  { icon: "layers", title: "Depth over breadth", text: "Two industries modelled properly, not twenty configured badly." },
-  { icon: "calculate", title: "A solver, not a guess", text: "An optimisation engine running against constraints you can read." },
-  { icon: "tune", title: "Planners stay in charge", text: "Any plan can be overridden. The cost of the override is recorded." },
-  { icon: "storage", title: "Data layer first", text: "We reconcile and fix the inputs before we optimise anything." },
-  { icon: "schedule", title: "Weeks, not quarters", text: "A first validated schedule in weeks, not a multi-quarter programme." },
-  { icon: "build_circle", title: "Built for a bad day", text: "A machine drops at 02:00. Replanning is routine, not a crisis." },
+  { icon: "auto_mode", title: "Automation-First", text: "The system builds the plan, so planners stop spending hours on Excel." },
+  { icon: "trending_up", title: "Measurable Efficiency Gains", text: "Less downtime, higher throughput and less production waste." },
+  { icon: "layers", title: "Depth Over Breadth", text: "We handle the industry-specific problems that off-the-shelf tools miss, instead of forcing a generic fit." },
+  { icon: "build_circle", title: "Accommodates Custom Needs", text: "Your plant's rules, processes and workflows are built into the plan, not worked around." },
+  { icon: "tune", title: "Stay in Charge", text: "The system proposes, you decide. Any plan can be edited by hand." },
+  { icon: "handshake", title: "A Hands-On Partner", text: "Close collaboration, quick turnarounds, and outcomes shaped around your operation." },
 ];
 
 export default function HomePage() {
@@ -17,8 +17,8 @@ export default function HomePage() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
-          <h1 className={styles.title}>From spreadsheet to executable schedule.</h1>
-          <p className={styles.lead}>Your constraints, stated once and enforced — resolved into a schedule your plant can run today.</p>
+          <h1 className={styles.title}>Every order, every machine, every minute. Planned.</h1>
+          <p className={styles.lead}>Advanced Planning &amp; Scheduling for manufacturers</p>
         </div>
         <div className={styles.heroFigure}>
           <HeroSheets />
